@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     handleLogin() {
-      if (localStorage.getItem('token') === null) {
+      if (localStorage.getItem('token') === '') {
         this.$router.push('/login')
       }
       // console.log(localStorage.getItem('token'))

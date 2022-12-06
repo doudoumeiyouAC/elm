@@ -16,7 +16,7 @@ export default new Vuex.Store({
   state: {
     isFooterShow: true,
     userName: '立即登录',
-    isManage: false
+    isManage: false,
   },
   getters: {
   },

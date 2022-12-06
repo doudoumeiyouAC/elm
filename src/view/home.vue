@@ -7,7 +7,7 @@
       </div>
       <div class="address">
         <i class="iconfont icon-dingweixiao icon-add" style="font-size: .9375rem"></i>
-        <span class="address-info">{{ address }}</span>
+        <span class="address-info">{{ gpsAddress }}</span>
         <i class="iconfont icon-you-copy icon-right" style="font-size: 0.875rem"></i>
         <span class="slogan">美食果蔬医药·30分钟送达</span>
       </div>
@@ -98,60 +98,50 @@ Vue.directive('sticky', { // 自定义指令，当页面滚动一定距离的时
 export default {
   data() {
     return {
-      address: '正在获取定位...',
+      gpsAddress: '正在获取定位...',
       dataList: []
     }
   },
   mounted() {
-    let limit = 0
+    const gpsAddress = localStorage.getItem('gpsAddress')
+    const latitude = localStorage.getItem('latitude')
+    const longitude = localStorage.getItem('longitude')
+    let limit = 5
     if (localStorage.getItem('token')) {
       limit = 20
-    } else {
-      limit = 5
     }
-    this.getPosition(limit)
-    // http({ // 二次封装的axios库 存放在 src/utils 中
-    //   url: `https://elm.cangdu.org/shopping/restaurants?latitude=28.358367&longitude=112.910709&limit=${limit}&order_by=5`
-    //   // url: `/shopping/restaurants?latitude=28.358367&longitude=112.910709&limit=${limit}&order_by=5`
-    // }).then(res => {
-    //   // console.log(res.data);
-    //   this.dataList = res.data
-    // })
-    // getShop({
-    //   latitude: this.latitude,
-    //   longitude: this.longitude,
-    //   limit: limit,
-    //   order_by: 5
-    // }).then(res => [
-    //   this.dataList = res.data
-    // ])
+
+    if (gpsAddress) {
+      this.gpsAddress = gpsAddress
+      this.loadShop(latitude, longitude, limit)
+    } else {
+      navigator.geolocation.getCurrentPosition(scu => {
+        getAddress(scu.coords.latitude + ',' + scu.coords.longitude).then(res => {
+          this.gpsAddress = res.data.name
+          localStorage.setItem('gpsAddress', res.data.name)
+          localStorage.setItem('latitude', res.data.latitude)
+          localStorage.setItem('longitude', res.data.longitude)
+        })
+        this.loadShop(scu.coords.latitude, scu.coords.longitude, limit)
+      }, err => {
+        console.log(err)
+      }, {
+        enableHighAccuracy: false, // 是否开启高精度定位
+        timeout: 10000,
+        maximumAge: 0
+      })
+    }
   },
   methods: {
-    getPosition(limit) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(scu => {
-          console.log(scu)
-          getAddress(scu.coords.latitude + ',' + scu.coords.longitude).then(res => {
-            this.address = res.data.name
-          })
-          getShop({
-            latitude: scu.coords.latitude,
-            longitude: scu.coords.longitude,
-            limit: limit,
-            order_by: 5
-          }).then(res => [
-            this.dataList = res.data
-          ])
-        }, err => {
-          console.log(err)
-        }, {
-          enableHighAccuracy: false, // 是否开启高精度定位
-          timeout: 10000,
-          maximumAge: 0
-        })
-      } else {
-        alert('该浏览器不支持navigator.geolocation')
-      }
+    loadShop(lat, long, lim) {
+      getShop({
+        latitude: lat,
+        longitude: long,
+        limit: lim,
+        order_by: 5
+      }).then(res => [
+        this.dataList = res.data
+      ])
     }
   }
 }
