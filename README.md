@@ -1,19 +1,38 @@
-# elm
+# elm-高仿饿了么最新H5网页端
 
-## Project setup
+因为自己刚学完Vue拿这个来做练手的项目，有些代码可能写的性能不好。欢迎大佬指出。改进。
+
+技术栈：Vue2+Vue-router+Vuex 还有一些小按钮什么的采用了移动端的组件库Vant
+
+## 安装依赖
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## 项目运行
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+本项目在打开首页时会通过 H5新增的地理位置api  `navigator.geolocation`   来获取当前设备的地理位置，所以运行时的协议是HTTPS。请注意
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 更新日志
+
+**2022-12-06**
+
+​	第一次上传项目，目前进度
+
+​	首页 会根据设备定位地址获取到附近的店铺
+
+​	订单页 会根据用户是否登录来显示不同信息页面
+
+​	个人中心页 根据用户登录来显示用户名
+
+​	登录页 如果用户是第一次登录默认会自动注册，如果不是第一次则需要输入正确的账号密码。以及验证码
+
+## 其他
+
+本项目的所有后端接口以及后台管理系统都来自Github上大佬的开源项目  [node-elm](https://github.com/bailicangdu/node-elm)
+
