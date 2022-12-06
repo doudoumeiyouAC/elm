@@ -1,7 +1,10 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: process.env.NODE_ENV === 'production' ? 'ele' : '/',
+
+  publicPath: '/ele/',    //gitee远程库名
+  outputDir: 'dist/',
+  assetsDir: 'static/',
 
   // vue的反向代理，解决跨域问题，就是让前端的服务器去请求后端的接口
   devServer: {
