@@ -1,7 +1,7 @@
 import axios from '@/utils/http'
 
 export const getShop = data => { // 获取首页商铺列表
-  return axios.get('/shopping/restaurants', {
+  return axios.get('https://elm.cangdu.org/shopping/restaurants', {
     params: data
   })
 }
