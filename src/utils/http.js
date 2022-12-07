@@ -9,7 +9,7 @@ Vue.use(Toast) // 全局使用轻提示
 axios.defaults.withCredentials = true // 设置允许跨域携带cookie
 
 const http = axios.create({
-  // baseURL: 'https://elm.cangdu.org',
+  // baseURL: '/api',
   timeout: 5000
 })
 
