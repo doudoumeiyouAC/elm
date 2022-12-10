@@ -18,7 +18,15 @@ npm run serve
 
 本项目在打开首页时会通过 H5新增的地理位置api  `navigator.geolocation`   来获取当前设备的地理位置，所以运行时的协议是HTTPS。请注意
 
-## 更新日志
+## 开发进度
+
+**2022-12-11**
+
+​	添加了地址页、地址搜索功能及获取当前定位功能，可以根据当前定位查看附近的店铺，可以根据搜索地址查看附近的店铺。尚未完成添加收货地址功能
+
+​	添加了城市列表页，可以根据点击某个城市跳转到地址搜索，搜索该城市的地址。尚未完成城市搜索功能
+
+​	以上功能几乎跟饿了么官方一致
 
 **2022-12-06**
 
@@ -34,5 +42,7 @@ npm run serve
 
 ## 其他
 
-本项目的所有后端接口以及后台管理系统都来自Github上大佬的开源项目  [node-elm](https://github.com/bailicangdu/node-elm)
+本项目的所有后端接口以及后台管理系统都来自Github上大佬的开源项目  [node-elm](https://github.com/bailicangdu/node-elm) 的线上接口
+
+非常感谢 [@bailicangdu](https://github.com/bailicangdu) 大佬提供的接口
 

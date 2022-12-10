@@ -10,7 +10,10 @@ axios.defaults.withCredentials = true // 设置允许跨域携带cookie
 
 const http = axios.create({
   // baseURL: '/api',
-  timeout: 5000
+  timeout: 5000,
+  // headers: {
+  //   showLoading: true
+  // }
 })
 
 http.defaults.headers.post['Content-Type'] = 'application/json; UTF-8'
@@ -19,11 +22,13 @@ http.defaults.headers.post['Content-Type'] = 'application/json; UTF-8'
 // 数据请求之前 在发送请求之前拦截
 http.interceptors.request.use(
   config => {
-    Toast.loading({ // 发送请求之前弹出加载提示
-      message: '加载中...',
-      duration: 0,
-      forbidClick: true
-    })
+    if (config.url != '/v1/pois') { // 如果当前请求的接口是搜索地址时，不使用加载动画
+      Toast.loading({ // 发送请求之前弹出加载提示
+        message: '加载中...',
+        duration: 0,
+        forbidClick: true
+      })
+    }
     // Toast('数据请求之前')
     return config
   },

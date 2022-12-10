@@ -17,6 +17,7 @@ export default new Vuex.Store({
     isFooterShow: true,
     userName: '立即登录',
     isManage: false,
+    city: {}
   },
   getters: {
   },
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     setIsManage: (state, bl) => {
       state.isManage = bl
+    },
+    setCity: (state, city) => {
+      state.city = city
     }
   },
   actions: {

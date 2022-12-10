@@ -13,9 +13,9 @@ module.exports = defineConfig({
       //   target: 'https://elm.cangdu.org', // 需要代理的服务器
       //   changeOrigin: true, // 开启跨域
       //   // ws: true,
-      //   secure: false, // 当接口为https时
+      //   // secure: true, // 当接口为https时
       //   pathRewrite: {
-      //     '^/api': '' // 重写路径名，把/api开头的重写成 ‘’ 空
+      //     '^/api': '/' // 重写路径名，把/api开头的重写成 ‘’ 空
       //   }
       // },
       '/v1': {
@@ -27,6 +27,22 @@ module.exports = defineConfig({
         // }
       },
       '/v2': {
+        target: 'https://elm.cangdu.org',
+        changeOrigin: true,
+        secure: false,
+        // pathRewite: {
+        //   '^/v2': '/'
+        // }
+      },
+      // '/shopping': {
+      //   target: 'https://elm.cangdu.org',
+      //   changeOrigin: true,
+      //   secure: false,
+      //   // pathRewite: {
+      //   //   '^/v2': '/'
+      //   // }
+      // },
+      '/bos': {
         target: 'https://elm.cangdu.org',
         changeOrigin: true,
         secure: false,

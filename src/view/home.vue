@@ -6,9 +6,11 @@
         <div>饿了么</div>
       </div>
       <div class="address">
-        <i class="iconfont icon-dingweixiao icon-add" style="font-size: .9375rem"></i>
-        <span class="address-info">{{ gpsAddress }}</span>
-        <i class="iconfont icon-you-copy icon-right" style="font-size: 0.875rem"></i>
+        <van-icon name="location-o" />
+        <!-- <i class="iconfont icon-dingweixiao icon-add" style="font-size: .9375rem"></i> -->
+        <span class="address-info" @click="handleAddress">{{ addressName }}</span>
+        <!-- <i class="iconfont icon-you-copy icon-right" style="font-size: 0.875rem"></i> -->
+        <van-icon size="0.75rem" name="arrow" />
         <span class="slogan">美食果蔬医药·30分钟送达</span>
       </div>
       <div style="height: 3.125rem;">
@@ -48,8 +50,10 @@
               <span>起送¥{{ data.float_minimum_order_amount }}</span>
               <span class="shop-deliver-fee">{{ data.piecewise_agent_fee.tips }}</span>
             </div>
-            <div class="shop-deliver-text">{{ data.delivery_mode.text }}</div> <!--配送方式是否由蜂鸟配送-->
-            <!-- <div class="shop-deliver-text" >{{ data.fields.restaurant.deliveryMode.text }}</div> -->
+            <!--配送方式是否由蜂鸟配送-->
+            <div class="shop-deliver-text" :style="data.delivery_mode ? '' : 'border: none'">{{ data.delivery_mode ?
+                data.delivery_mode.text : ''
+            }}</div>
           </div>
           <div class="shop-tag">{{ data.promotion_info }}</div>
           <div class="shop-tags">
@@ -70,17 +74,12 @@
 
 <script>
 import Vue from 'vue'
+import { Icon } from 'vant'
 
 import { getShop, getAddress } from '@/api/api' // 导入自己二次封装的axios库
+import { setLocStorage } from '@/utils/setLocStorage' // 用来设置 localStorage 中的 addressName,latitude,longitude值(务必按顺序传值)
 
-// Vue.filter('distanceFilter', data => { // 过滤器，用来处理请求过来的店铺距离
-//   if ((data / 1000) >= 1) {
-//     return `${(data / 1000).toFixed(1)}km` // .toFixed(1)保留小数点后一位
-//   } else {
-//     return `${(data / 1000).toString().substring(2)}m` // .toString().substring(2)转换成字符串，把字符串前两位截取不要
-//   }
-// })
-
+Vue.use(Icon)
 
 Vue.directive('sticky', { // 自定义指令，当页面滚动一定距离的时候让搜索框固定不动
   inserted: (el) => {
@@ -90,7 +89,6 @@ Vue.directive('sticky', { // 自定义指令，当页面滚动一定距离的时
       } else {
         el.style = 'position: relative'
       }
-
     }
   }
 })
@@ -98,12 +96,12 @@ Vue.directive('sticky', { // 自定义指令，当页面滚动一定距离的时
 export default {
   data() {
     return {
-      gpsAddress: '正在获取定位...',
+      addressName: '正在获取定位...',
       dataList: []
     }
   },
   mounted() {
-    const gpsAddress = localStorage.getItem('gpsAddress')
+    const addressName = localStorage.getItem('addressName')
     const latitude = localStorage.getItem('latitude')
     const longitude = localStorage.getItem('longitude')
     let limit = 5
@@ -111,16 +109,17 @@ export default {
       limit = 20
     }
 
-    if (gpsAddress) {
-      this.gpsAddress = gpsAddress
+    if (addressName) {
+      this.addressName = addressName
       this.loadShop(latitude, longitude, limit)
     } else {
       navigator.geolocation.getCurrentPosition(scu => {
         getAddress(scu.coords.latitude + ',' + scu.coords.longitude).then(res => {
-          this.gpsAddress = res.data.name
-          localStorage.setItem('gpsAddress', res.data.name)
-          localStorage.setItem('latitude', res.data.latitude)
-          localStorage.setItem('longitude', res.data.longitude)
+          this.addressName = res.data.name
+          setLocStorage(res.data.name, res.data.latitude, res.data.longitude)
+          // localStorage.setItem('addressName', res.data.name)
+          // localStorage.setItem('latitude', res.data.latitude)
+          // localStorage.setItem('longitude', res.data.longitude)
         })
         this.loadShop(scu.coords.latitude, scu.coords.longitude, limit)
       }, err => {
@@ -133,6 +132,9 @@ export default {
     }
   },
   methods: {
+    handleAddress() {
+      this.$router.push('/address')
+    },
     loadShop(lat, long, lim) {
       getShop({
         latitude: lat,
@@ -154,6 +156,7 @@ export default {
   background-image: linear-gradient(white 6.25rem, #f5f5f5 14.0625rem);
 
   header {
+    padding-top: 2.75rem;
     height: 4.875rem;
     background-image: linear-gradient(90deg, rgb(41, 202, 255) 0%, rgb(0, 171, 245) 100%);
 
@@ -173,7 +176,6 @@ export default {
     }
 
     .address {
-      margin-top: 2.75rem;
       position: relative;
       padding: .75rem .75rem 0 .75rem;
       width: 100%;
@@ -182,27 +184,19 @@ export default {
       border-top-left-radius: 1.25rem;
       border-top-right-radius: 1.25rem;
 
-      .icon-add {
-        position: absolute;
-        top: 1.0625rem;
-        left: .8125rem;
+      .van-icon {
+        vertical-align: middle;
       }
 
       .address-info {
+        vertical-align: middle;
         display: inline-block;
-        width: 6.25rem;
-        margin-left: 1.125rem;
+        max-width: 6.25rem;
         font-size: 1rem;
         color: #333;
         overflow: hidden; // 溢出隐藏
         text-overflow: ellipsis; // 溢出的部分显示成...
         white-space: nowrap; // 溢出不换行
-      }
-
-      .icon-right {
-        position: absolute;
-        top: 1.125rem;
-        left: 7.6875rem;
       }
 
       .slogan {

@@ -9,12 +9,12 @@
 export default {
   mounted() {
     if (localStorage.getItem('token')) {
-      if (this.$route.path != '/order/oderlist') {
-        this.$router.replace('/order/oderlist')
+      if (this.$route.path != '/order/order_list') {
+        this.$router.replace('/order/order_list')
       }
     } else {
-      if (this.$route.path != '/order/unloginorder') {
-        this.$router.replace('/order/unloginorder')
+      if (this.$route.path != '/order/unlogin_order') {
+        this.$router.replace('/order/unlogin_order')
       }
     }
   }

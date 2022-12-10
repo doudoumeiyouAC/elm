@@ -1,10 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import home from '@/view/home'
-import oder from '@/view/order'
-import center from '@/view/center'
-import login from '@/view/login'
+import home from '@/view/Home'
+import oder from '@/view/Order'
+import center from '@/view/Center'
+
+// 获取原型对象push函数
+const originalPush = VueRouter.prototype.push
+
+// 获取原型对象replace函数
+const originalReplace = VueRouter.prototype.replace
+
+// 修改原型对象中的push函数
+VueRouter.prototype.push = function push(location){
+return originalPush.call(this , location).catch(err=>err)
+}
+
+// 修改原型对象中的replace函数
+VueRouter.prototype.replace = function replace(location){
+return originalReplace.call(this , location).catch(err=>err)
+}
+
 
 Vue.use(VueRouter)
 
@@ -19,33 +35,42 @@ const routes = [
   },
   {
     path: '/home',
-    name: 'home',
     component: home
   },
+  // {
+  //   path: '/home/:name/:latitude/:longitude', // 三级动态路由
+  //   component: home
+  // },
   {
     path: '/order',
-    name: 'order',
     component: oder,
     meta: { isSkip: true },
     children: [
       {
-        path: '/order/unloginorder',
-        component: () => import('@/components/unLoginOrder')
+        path: '/order/unlogin_order',
+        component: () => import('@/components/order/UnLoginOrder')
       },
       {
-        path: '/order/oderlist',
-        component: () => import('@/components/orderList')
+        path: '/order/order_list',
+        component: () => import('@/components/order/OrderList')
       }
     ]
   },
   {
     path: '/center',
-    name: 'center',
     component: center
   },
   {
     path: '/login',
-    component: login
+    component: () => import('@/view/Login')
+  },
+  {
+    path: '/address',
+    component: () => import('@/view/Address')
+  },
+  {
+    path: '/address/city_list',
+    component: () => import('@/view/CityList')
   }
 ]
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="error">
-      <img src="https://img.alicdn.com/tfs/TB1g6d4LBr0gK0jSZFnXXbRRXXa-600-600.png" alt="">
+      <img src="@/assets/elmimg.png" alt="">
       <div class="error-title">
         登录后查看外卖订单
       </div>
